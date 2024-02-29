@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://api.weatherapi.com/v1/';
+const BASE_URL = 'https://pokeapi.co/api/v2/';
 const API_KEY = '403493facebc426898532131242902';
 
 const api = axios.create({
