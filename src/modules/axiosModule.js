@@ -5,13 +5,12 @@ const API_KEY = '403493facebc426898532131242902';
 
 const api = axios.create({
 	baseURL: BASE_URL,
-	timeout: 10000, // Sin la "s" extra
+	timeout: 10000,
 });
 
 const ApiRequests = {
 	get: async (endpoint, params = {}) => {
 		try {
-			// Agrega los parámetros de consulta aquí
 			const response = await api.get(endpoint, { params: { ...params, key: API_KEY } });
 			return response.data;
 		} catch (error) {
