@@ -1,52 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
-import ApiRequests from '../modules/axiosModule';
+import { useRetrieveData } from './retrieveData';
 
 const MainView = () => {
-	const [pokemonInitialData, setPokemonInitialData] = useState(null);
-	const [pokemonIndividualData, setPokemonIndividualData] = useState({});
-	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const response = await ApiRequests.get('pokemon');
-				setPokemonInitialData(response.results);
-				console.log(response.results);
-
-				response.results.forEach(async (pokemon) => {
-					const id = pokemon.url.split('/').filter(Boolean).pop();
-					const pokeData = await fetchIndividualPokemonData(id);
-					setPokemonIndividualData(prevState => ({
-						...prevState,
-						[id]: pokeData
-					}));
-				});
-			} catch (error) {
-				console.log("Error al obtener los datos:", error);
-			}
-		};
-		fetchData();
-	}, []);
-
-	const fetchIndividualPokemonData = async (id) => {
-		try {
-			const response = await ApiRequests.get(`pokemon/${id}`);
-			return response;
-		} catch (error) {
-			console.log("Error al obtener los sprites del Pokémon:", error);
-			return null;
-		}
-	};
+	const { pokemonList } = useRetrieveData();
 
 	const renderPokemon = ({ item }) => {
-		const id = item.url.split('/').filter(Boolean).pop();
-		const pokeData = pokemonIndividualData[id];
-		const spriteUrl = pokeData?.sprites?.front_shiny ?? null;
 		return (
 			<View style={styles.pokemonContainer}>
 				<Text style={styles.condition}>{item.name}</Text>
 				<Image
 					style={styles.sprite}
-					source={{ uri: spriteUrl }}
+					source={{ uri: item.spriteUrl }}
 				/>
 			</View>
 		);
@@ -54,14 +19,12 @@ const MainView = () => {
 
 	return (
 		<View style={styles.container}>
-			{pokemonInitialData && (
-				<FlatList
-					style={styles.flatContainer}
-					data={pokemonInitialData}
-					renderItem={renderPokemon}
-					keyExtractor={(item) => item.name}
-				/>
-			)}
+			<FlatList
+				style={styles.flatContainer}
+				data={pokemonList}
+				renderItem={renderPokemon}
+				keyExtractor={(item) => item.name}
+			/>
 		</View>
 	);
 };

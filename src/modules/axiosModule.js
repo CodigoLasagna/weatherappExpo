@@ -6,25 +6,26 @@ const API_KEY = '403493facebc426898532131242902';
 const api = axios.create({
 	baseURL: BASE_URL,
 	timeout: 10000,
+	params: { key: API_KEY }
 });
 
 const ApiRequests = {
-	get: async (endpoint, params = {}) => {
+	getPokemonList: async () => {
 		try {
-			const response = await api.get(endpoint, { params: { ...params, key: API_KEY } });
-			return response.data;
+			const response = await api.get('pokemon');
+			return response.data.results;
 		} catch (error) {
-			console.error('Error en la solicitud GET:', error);
+			console.error('Error fetching Pokémon list:', error);
 			throw error;
 		}
 	},
 
-	post: async (endpoint, data = {}) => {
+	getPokemonData: async (id) => {
 		try {
-			const response = await api.post(endpoint, data);
+			const response = await api.get(`pokemon/${id}`);
 			return response.data;
 		} catch (error) {
-			console.error('Error en la solicitud POST:', error);
+			console.error(`Error fetching Pokémon data for ID ${id}:`, error);
 			throw error;
 		}
 	},
