@@ -1,14 +1,23 @@
 import { StyleSheet } from 'react-native';
 
+export const colors = {
+	primary: '#AE3838',
+	secondary: '#2A5D90',
+	tertiary: '#3fb76b',
+	foreground: '#1B232B',
+	background: '#1B232B',
+	text: '#FFFFFF',
+};
+
 export const globalStyles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: '#1B232B',
+		backgroundColor: colors.background,
 	},
 	flatContainer: {
-		backgroundColor: '#AE3838',
+		backgroundColor: colors.primary,
 		width: '90%',
 		borderRadius: 16,
 		marginTop: 20,
@@ -21,7 +30,7 @@ export const globalStyles = StyleSheet.create({
 	condition: {
 		fontSize: 24,
 		color: '#2A5D90',
-		backgroundColor: '#1E2935',
+		backgroundColor: colors.background,
 		padding: 10,
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
@@ -29,7 +38,7 @@ export const globalStyles = StyleSheet.create({
 	sprite: {
 		width: 200,
 		height: 200,
-		backgroundColor: '#1E2935',
+		backgroundColor: colors.background,
 		borderRadius: 24,
 	},
 });

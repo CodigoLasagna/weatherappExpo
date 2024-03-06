@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, FlatList, Image } from 'react-native';
+import { View } from 'react-native';
+import { MutableText, MutableImage, MutableFlatList } from './mutableComps';
 import { globalStyles } from '../styles/global';
 import { useRetrieveData } from './retrieveData';
 
@@ -9,8 +10,8 @@ const MainView = () => {
 	const renderPokemon = ({ item }) => {
 		return (
 			<View style={globalStyles.pokemonContainer}>
-				<Text style={globalStyles.condition}>{item.name}</Text>
-				<Image
+				<MutableText fontSize={30} color={'#fff'} borderRadius={16} padding={10}>{item.name}</MutableText>
+				<MutableImage
 					style={globalStyles.sprite}
 					source={{ uri: item.spriteUrl }}
 				/>
@@ -20,7 +21,7 @@ const MainView = () => {
 
 	return (
 		<View style={globalStyles.container}>
-			<FlatList
+			<MutableFlatList
 				style={globalStyles.flatContainer}
 				data={pokemonList}
 				renderItem={renderPokemon}
