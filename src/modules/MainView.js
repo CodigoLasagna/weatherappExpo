@@ -1,34 +1,22 @@
 import React from 'react';
-import { View } from 'react-native';
-import { MutableText, MutableImage, MutableFlatList } from './mutableComps';
-import { globalStyles } from '../styles/global';
-import { useRetrieveData } from './retrieveData';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeView from './HomeView';
+import TestView from './TestView';
+import PokeView from './PokeView';
 
-const MainView = () => {
-	const { pokemonList } = useRetrieveData();
+const Stack = createNativeStackNavigator();
 
-	const renderPokemon = ({ item }) => {
-		return (
-			<View style={globalStyles.pokemonContainer}>
-				<MutableText fontSize={30} color={'#fff'} borderRadius={16} padding={10}>{item.name}</MutableText>
-				<MutableImage
-					style={globalStyles.sprite}
-					source={{ uri: item.spriteUrl }}
-				/>
-			</View>
-		);
-	};
-
+function MainView() {
 	return (
-		<View style={globalStyles.container}>
-			<MutableFlatList
-				style={globalStyles.flatContainer}
-				data={pokemonList}
-				renderItem={renderPokemon}
-				keyExtractor={(item) => item.name}
-			/>
-		</View>
+		<NavigationContainer>
+			<Stack.Navigator initialRouteName="Home">
+				<Stack.Screen name="Home" component={HomeView} />
+				<Stack.Screen name="Test" component={TestView} />
+				<Stack.Screen name="Pokedex" component={PokeView} />
+			</Stack.Navigator>
+		</NavigationContainer>
 	);
-};
+}
 
 export default MainView;

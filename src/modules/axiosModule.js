@@ -1,12 +1,10 @@
 import axios from 'axios';
 
 const BASE_URL = 'https://pokeapi.co/api/v2/';
-const API_KEY = '403493facebc426898532131242902';
 
 const api = axios.create({
 	baseURL: BASE_URL,
 	timeout: 10000,
-	params: { key: API_KEY }
 });
 
 const ApiRequests = {

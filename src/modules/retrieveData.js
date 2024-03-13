@@ -3,37 +3,35 @@ import ApiRequests from './axiosModule';
 
 export const useRetrieveData = () => {
 	const [pokemonList, setPokemonList] = useState([]);
+	const [isDataLoaded, setIsDataLoaded] = useState(false);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const pokemonData = await ApiRequests.getPokemonList();
-				setPokemonList(pokemonData);
-			} catch (error) {
-				console.log("Error fetching Pokémon data:", error);
+		const fetchPokemonListAndData = async () => {
+			if (!isDataLoaded) {
+				try {
+					const pokemonData = await ApiRequests.getPokemonList();
+					const promises = pokemonData.map(async (pokemon) => {
+						const id = pokemon.url.split('/').filter(Boolean).pop();
+						return ApiRequests.getPokemonData(id).then(pokeData => ({
+							...pokemon,
+							spriteUrl: pokeData.sprites.front_shiny ?? null,
+						}));
+					});
+
+					Promise.all(promises).then((pokemonWithSprites) => {
+						setPokemonList(pokemonWithSprites);
+						setIsDataLoaded(true);
+					}).catch((error) => {
+						console.log("Error fetching Pokémon sprites:", error);
+					});
+				} catch (error) {
+					console.log("Error fetching Pokémon data:", error);
+				}
 			}
 		};
-		fetchData();
-	}, []);
 
-	useEffect(() => {
-		const fetchPokemonData = async () => {
-			const promises = pokemonList.map(async (pokemon) => {
-				const id = pokemon.url.split('/').filter(Boolean).pop();
-				const pokeData = await ApiRequests.getPokemonData(id);
-				const spriteUrl = pokeData.sprites.front_shiny ?? null;
-				return { ...pokemon, spriteUrl };
-			});
-
-			Promise.all(promises).then((pokemonWithSprites) => {
-				setPokemonList(pokemonWithSprites);
-			}).catch((error) => {
-				console.log("Error fetching Pokémon sprites:", error);
-			});
-		};
-
-		fetchPokemonData();
-	}, [pokemonList]);
+		fetchPokemonListAndData();
+	}, [isDataLoaded]);
 
 	return { pokemonList };
 };
